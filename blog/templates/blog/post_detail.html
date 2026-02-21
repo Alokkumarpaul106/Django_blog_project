@@ -1,0 +1,63 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ object.title }} - Django Blog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <article class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="card-title display-6 fw-bold mb-3">{{ object.title }}</h1>
+
+                <div class="post-meta text-muted mb-4 pb-3 border-bottom">
+                    <small>
+                        <i class="bi bi-person-circle me-1"></i>
+                        By <strong>{{ object.author.username }}</strong>
+                        <span class="mx-2">•</span>
+                        <i class="bi bi-calendar-event me-1"></i>
+                        Published on {{ object.created_date|date:"F d, Y" }}
+                        {% if object.updated_date != object.created_date %}
+                        <span class="mx-2">•</span>
+                        <i class="bi bi-pencil me-1"></i>
+                        Updated {{ object.updated_date|date:"F d, Y" }}
+                        {% endif %}
+                    </small>
+                </div>
+
+                <div class="post-content mb-4">
+                    <p class="lead" style="white-space: pre-wrap;">{{ object.content }}</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-2 mt-4 pt-3 border-top">
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Home
+                    </a>
+
+                    {% if user == object.author %}
+                    <a href="{% url 'post_update' object.pk %}" class="btn btn-warning">
+                        <i class="bi bi-pencil-square me-2"></i>Edit
+                    </a>
+                    <a href="{% url 'post_delete' object.pk %}" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Delete
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+
+        <!-- Author Info Card -->
+        <div class="card mt-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-person-badge me-2"></i>About the Author
+                </h5>
+                <p class="mb-0">
+                    <strong>{{ object.author.username }}</strong> has been a member since
+                    {{ object.author.date_joined|date:"F Y" }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
